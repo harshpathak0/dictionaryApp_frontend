@@ -122,9 +122,16 @@ const handleDeleteMeaning = async (wordId, meaningId) => {
             ? item.meanings.filter((meaning) => meaning._id !== meaningId)
             : [];
 
+          if (item._id === selectedWord._id) {
+            setSelectedWord({
+              ...item,
+              meanings: updatedMeanings,  
+            });
+          }
+
           return {
             ...item,
-            meanings: updatedMeanings, 
+            meanings: updatedMeanings,
           };
         }
         return item;
@@ -140,15 +147,11 @@ return (
     className="relative min-h-screen bg-cover bg-center bg-no-repeat"
     style={{ backgroundImage: 'url(${bgImg})' }}
   >
-    {/* Navbar */}
     <Navbar className="fixed top-0 left-0 w-full z-50" />
 
-    {/* Main Content */}
     <main className="relative z-10 flex-grow flex flex-col items-center justify-center text-center min-h-screen pt-20 pb-20">
-      {/* Background blur effect */}
       <div className="absolute inset-0 bg-purple-500 opacity-60 blur-xl"></div>
 
-      {/* Box with blurred background */}
       <div className="relative z-10 bg-white bg-opacity-50 backdrop-blur-3xl p-10 rounded-xl shadow-2xl">
         <h1 className="text-5xl text-customGray font-bold mb-6">
           Dictionary App
@@ -167,7 +170,6 @@ return (
           </button>
         </div>
 
-        {/* Dropdown list of filtered words */}
         {filteredWords.length > 0 && (
           <ul className="absolute left-0 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 min-h-40 overflow-y-auto">
             {filteredWords.map((wordObj) => (
@@ -195,93 +197,14 @@ return (
           <img src={img1} alt="Illustration" className="h-40 mx-auto" />
         </div>
 
-        {/* Display the motivational quote */}
         <div className="mt-4 text-lg font-semibold text-gray-700">
           {currentQuote}
         </div>
       </div>
     </main>
-    {/* Footer */}
     <Footer className="fixed bottom-0 left-0 w-full z-50" />
   </div>
 );
 };
 
 export default HomePage;
-
-
-
-//   return (
-//     <div
-//       className="relative min-h-screen bg-cover bg-center bg-no-repeat"
-//       style={{ backgroundImage: `url(${bgImg})` }}
-//     >
-//       {/* Navbar */}
-//       <Navbar className="fixed top-0 left-0 w-full z-50" />
-
-//       {/* Main Content */}
-//       <main className="relative z-10 flex-grow flex flex-col items-center justify-center text-center min-h-screen pt-20 pb-20">
-//         {/* Background blur effect */}
-//         <div className="absolute inset-0 bg-purple-500 opacity-60 blur-xl"></div>
-
-//         {/* Box with blurred background */}
-//         <div className="relative z-10 bg-white bg-opacity-50 backdrop-blur-3xl p-10 rounded-xl shadow-2xl">
-//           <h1 className="text-5xl text-customGray font-bold mb-6">
-//             Dictionary App
-//           </h1>
-
-//           <div className="flex items-center bg-white rounded-full shadow-md p-2 mb-6 w-full">
-//             <input
-//               type="text"
-//               placeholder="Search word..."
-//               className="flex-grow px-4 py-2 text-gray-700 bg-transparent focus:outline-none"
-//               onChange={handleSearch}
-//               value={query}
-//             />
-//             <button className="px-4 py-2 text-white bg-blue-500 rounded-full">
-//               <FaSearch size={20} />
-//             </button>
-//           </div>
-
-//            {/* Dropdown list of filtered words */}
-//            {filteredWords.length > 0 && (
-//             <ul className="absolute left-0 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 min-h-40 overflow-y-auto">
-//               {filteredWords.map((wordObj) => (
-//                 <li
-//                   key={wordObj._id}
-//                   onClick={() => handleWordSelect(wordObj)}
-//                   className="px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-gray-200"
-//                 >
-//                   {wordObj.word}
-//                 </li>
-//               ))}
-//             </ul>
-//           )}
-
-
-//           {selectedWord && (
-//             <WordDetails
-//               word={selectedWord}
-//               onAddMeaning={handleAddMeaning}
-//               onEditMeaning={handleEditMeaning}
-//               onDeleteMeaning={handleDeleteMeaning}
-//             />
-//           )}
-
-//           <div className="mt-6">
-//             <img src={img1} alt="Illustration" className="h-40 mx-auto" />
-//           </div>
-
-//           {/* Display the motivational quote */}
-//           <div className="mt-4 text-lg font-semibold text-gray-700">
-//             {currentQuote}
-//           </div>
-//         </div>
-//       </main>
-//       {/* Footer */}
-//       <Footer className="fixed bottom-0 left-0 w-full z-50" />
-//     </div>
-//   );
-// };
-
-// export default HomePage;
