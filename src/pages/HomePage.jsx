@@ -118,14 +118,13 @@ const handleDeleteMeaning = async (wordId, meaningId) => {
     setWords((prevWords) =>
       prevWords.map((item) => {
         if (item._id === wordId) {
-          // Check if 'meanings' is defined and is an array before filtering
           const updatedMeanings = item.meanings
             ? item.meanings.filter((meaning) => meaning._id !== meaningId)
             : [];
 
           return {
             ...item,
-            meanings: updatedMeanings, // Update meanings only if they exist
+            meanings: updatedMeanings, 
           };
         }
         return item;
