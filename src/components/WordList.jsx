@@ -1,14 +1,13 @@
 const WordList = ({ words, onDelete, onUpdate }) => {
     return (
       <div className="mt-6">
-        {words.map((item, index) => (
+        {words.map((item) => (
           <div
-            key={index}
+            key={item._id}
             className="flex justify-between items-center bg-gray-100 p-4 rounded-md mb-2"
           >
             <div>
               <h3 className="font-semibold text-lg">{item.word}</h3>
-              <p>{item.meanings.join(", ")}</p>
             </div>
             <div>
               <button

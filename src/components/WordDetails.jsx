@@ -1,13 +1,156 @@
+// import { useState } from "react";
+// import Modal from "./Modal";
+// import { FaEdit, FaTrash } from "react-icons/fa";
+
+// const WordDetails = ({ word, onAddMeaning, onEditMeaning, onDeleteMeaning }) => {
+//   const [isAddModalOpen, setAddModalOpen] = useState(false);
+//   const [isEditModalOpen, setEditModalOpen] = useState(false);
+//   const [selectedMeaning, setSelectedMeaning] = useState("");
+//   const [newMeaning, setNewMeaning] = useState("");
+
+//   const openAddModal = () => setAddModalOpen(true);
+//   const closeAddModal = () => {
+//     setAddModalOpen(false);
+//     setNewMeaning("");
+//   };
+
+//   const openEditModal = (meaning) => {
+//     setSelectedMeaning(meaning.meaning);
+//     setEditModalOpen(true);
+//   };
+
+//   const closeEditModal = () => {
+//     setEditModalOpen(false);
+//     setSelectedMeaning("");
+//   };
+
+//   const handleAddMeaning = () => {
+//     if (newMeaning.trim()) {
+//       onAddMeaning(word.word, newMeaning);
+//       closeAddModal();
+//     }
+//   };
+
+//   const handleEditMeaning = () => {
+//     if (!selectedMeaning.trim() || !word.meanings) return;
+
+//     const updatedMeanings = word.meanings.map((meaning) =>
+//       meaning.meaning === selectedMeaning
+//         ? { ...meaning, meaning: selectedMeaning }
+//         : meaning
+//     );
+
+//     onEditMeaning(word.word, updatedMeanings);
+//     closeEditModal();
+//   };
+
+//   const handleDeleteMeaning = (meaningId) => {
+//     onDeleteMeaning(meaningId);
+//   };
+
+//   if (!word) return <p className="mt-4 text-gray-500">No word selected.</p>;
+
+//   return (
+//     <div className="mt-4 p-4 bg-blue-50 rounded-md">
+//       <h2 className="text-xl font-bold">{word.word}</h2>
+//       <ul className="mt-2 min-h-[80px] overflow-auto max-h-[300px]">
+//         {word.meanings && word.meanings.length > 0 ? (
+//           word.meanings.map((meaning) => (
+//             <li
+//               key={meaning._id}
+//               className="flex justify-between items-center p-2 bg-gray-100 rounded-md mb-2"
+//             >
+//               <span className="">{meaning.meaning}</span>
+//               <div className="p-2">
+//                 <button
+//                   className="bg-yellow-400 text-white p-2 rounded-md hover:bg-yellow-600 ml-1"
+//                   onClick={() => openEditModal(meaning)}
+//                 >
+//                   <FaEdit size={18} />
+//                 </button>
+//                 <button
+//                   className="bg-red-400 text-white p-2 rounded-md hover:bg-red-600 ml-3"
+//                   onClick={() => handleDeleteMeaning(meaning._id)}
+//                 >
+//                   <FaTrash size={18} />
+//                 </button>
+//               </div>
+//             </li>
+//           ))
+//         ) : (
+//           <li className="text-gray-500">No meanings available for this word.</li>
+//         )}
+//       </ul>
+
+//       {/* Add Meaning Button */}
+//       <button
+//         className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
+//         onClick={openAddModal}
+//       >
+//         Add Meaning
+//       </button>
+
+//       {/* Add Meaning Modal */}
+//       <Modal
+//         isOpen={isAddModalOpen}
+//         onClose={closeAddModal}
+//         title="Add New Meaning"
+//       >
+//         <input
+//           type="text"
+//           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+//           placeholder="Enter new meaning..."
+//           value={newMeaning}
+//           onChange={(e) => setNewMeaning(e.target.value)}
+//         />
+//         <button
+//           className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
+//           onClick={handleAddMeaning}
+//         >
+//           Add
+//         </button>
+//       </Modal>
+
+//       {/* Edit Meaning Modal */}
+//       <Modal
+//         isOpen={isEditModalOpen}
+//         onClose={closeEditModal}
+//         title="Edit Meaning"
+//       >
+//         <input
+//           type="text"
+//           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+//           value={selectedMeaning}
+//           onChange={(e) => setSelectedMeaning(e.target.value)}
+//         />
+//         <button
+//           className="mt-4 w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-600"
+//           onClick={handleEditMeaning}
+//         >
+//           Save
+//         </button>
+//       </Modal>
+//     </div>
+//   );
+// };
+
+// export default WordDetails;
+
+
+
+
 import { useState } from "react";
 import Modal from "./Modal";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
-const WordDetails = ({ word, onAddMeaning, onEditMeaning }) => {
+const WordDetails = ({ word, onAddMeaning, onEditMeaning, onDeleteMeaning }) => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [selectedMeaningId, setSelectedMeaningId] = useState(null);
   const [selectedMeaning, setSelectedMeaning] = useState("");
   const [newMeaning, setNewMeaning] = useState("");
 
+  // Open and close modals
   const openAddModal = () => setAddModalOpen(true);
   const closeAddModal = () => {
     setAddModalOpen(false);
@@ -15,26 +158,35 @@ const WordDetails = ({ word, onAddMeaning, onEditMeaning }) => {
   };
 
   const openEditModal = (meaning) => {
-    setSelectedMeaning(meaning);
+    setSelectedMeaning(meaning.meaning);
+    setSelectedMeaningId(meaning._id);
     setEditModalOpen(true);
   };
+
   const closeEditModal = () => {
     setEditModalOpen(false);
     setSelectedMeaning("");
   };
 
+  // Handle adding meaning
   const handleAddMeaning = () => {
     if (newMeaning.trim()) {
-      onAddMeaning(word.word, newMeaning);
+      onAddMeaning(word._id, newMeaning); // Pass new meaning to parent
       closeAddModal();
     }
   };
 
+  // Handle editing meaning
   const handleEditMeaning = () => {
     if (selectedMeaning.trim()) {
-      onEditMeaning(word.word, selectedMeaning);
+      onEditMeaning(word._id, selectedMeaningId, selectedMeaning); // Pass edited meaning to parent
       closeEditModal();
     }
+  };
+
+  // Handle deleting meaning
+  const handleDeleteMeaning = (meaningId) => {
+    onDeleteMeaning(word._id, meaningId); // Pass delete action to parent
   };
 
   if (!word) return <p className="mt-4 text-gray-500">No word selected.</p>;
@@ -42,35 +194,39 @@ const WordDetails = ({ word, onAddMeaning, onEditMeaning }) => {
   return (
     <div className="mt-4 p-4 bg-blue-50 rounded-md">
       <h2 className="text-xl font-bold">{word.word}</h2>
-      <ul className="mt-2">
-        {word.meanings.map((meaning, index) => (
-          <li
-            key={index}
-            className="flex justify-between items-center p-2 bg-gray-100 rounded-md mb-2"
-          >
-            <span className="">{meaning}</span>
-            <div className="p-2">
-              <button
-                className="bg-yellow-400 text-white p-3 rounded-md hover:bg-yellow-600 ml-1 "
-                onClick={() => openEditModal(meaning)}
-              >
-                <FaEdit size={18} />
-              </button>
-              <button
-                className="bg-red-400 text-white p-3 rounded-md hover:bg-red-600 ml-3"
-                onClick={() => openEditModal(meaning)}
-              >
-                <FaTrash size={18} />
-              </button>
-            </div>
-          </li>
-        ))}
+      <ul className="mt-2 min-h-[80px] overflow-auto max-h-[300px]">
+        {word.meanings && word.meanings.length > 0 ? (
+          word.meanings.map((meaning) => (
+            <li
+              key={meaning._id}
+              className="flex justify-between items-center p-2 bg-gray-100 rounded-md mb-2"
+            >
+              <span>{meaning.meaning}</span>
+              <div className="flex space-x-2">
+                <button
+                  className="text-blue-500 hover:text-blue-700"
+                  onClick={() => openEditModal(meaning)}
+                >
+                  <FaEdit />
+                </button>
+                <button
+                  className="text-red-500 hover:text-red-700"
+                  onClick={() => handleDeleteMeaning(meaning._id)}
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            </li>
+          ))
+        ) : (
+          <p className="text-gray-500">No meanings added yet.</p>
+        )}
       </ul>
 
       {/* Add Meaning Button */}
       <button
-        className="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
         onClick={openAddModal}
+        className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md"
       >
         Add Meaning
       </button>
